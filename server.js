@@ -1,20 +1,18 @@
-// Require Libraries
-const express = require('express');
+var express = require('express');
+var exphbs  = require('express-handlebars');
 
-// App Setup
-const app = express();
-const port = 3000
-// Middleware
+var app = express();
 
-// Routes
-app.get('/', (req, res) => {
-    res.render('main')
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+
+app.get('/', function (req, res) {
+    res.render('home');
+});
+
+app.get('main', (req, res) => {
+    res.render('main', {});
 })
-
-// app.get('/posts/new', (req, res) => {
-//     res.render('new post')
-// })
-
 // Start Server
 
 app.listen(3000, () => {
