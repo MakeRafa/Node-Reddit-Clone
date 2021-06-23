@@ -1,4 +1,4 @@
-const Post = require('../models/post');
+const Post = require('../models/posts');
 
 module.exports = (app) => {
     // CREATE
@@ -18,7 +18,7 @@ module.exports = (app) => {
                 console.log(err.message);
             })
     })
-    
+
     // LOOK UP THE POST
     app.get('/posts/:id', (req, res) => {
         Post.findById(req.params.id).lean()
