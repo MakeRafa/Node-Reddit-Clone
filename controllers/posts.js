@@ -17,7 +17,6 @@ module.exports = (app) => {
     app.get('/', async (req, res) => {
         try {
             const posts = await Post.find({}).lean();
-            console.log(posts)
             return res.render('posts-index', { posts });
         } catch (err) {
             console.log(err.message);
@@ -32,4 +31,16 @@ module.exports = (app) => {
                 console.log(err.message);
             });
     });
+
+    // SUBREDDIT
+    app.get('/n/:subreddit', async (req, res) => {
+        // console.log(req.params.subreddit);
+        try {
+            const posts = await Post.find({ subreddit: req.params.subreddit }).lean();
+            return res.render('posts-index', { posts });
+        } catch (err) {
+            console.log(err.message);
+        }
+    });
+
 };
