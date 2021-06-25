@@ -10,11 +10,6 @@ app.set('view engine', 'handlebars');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-//MIDDLEWARE 
-require('./controllers/posts')(app);
-require('./data/reddit-db');
-
-
 //ROUTES
 app.get('/', function (req, res) {
     res.render('home');
@@ -24,10 +19,8 @@ app.get('main', (req, res) => {
     res.render('main', {});
 })
 
-app.get('/posts/new', (req, res) => {
-    res.render('posts-new', {});
-})
-
+require('./controllers/posts')(app);
+require('./data/reddit-db');
 
 module.exports = app;
 
