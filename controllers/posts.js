@@ -17,6 +17,7 @@ module.exports = (app) => {
     app.get('/', async (req, res) => {
         try {
             const posts = await Post.find({}).lean();
+            console.log(posts)
             return res.render('posts-index', { posts });
         } catch (err) {
             console.log(err.message);

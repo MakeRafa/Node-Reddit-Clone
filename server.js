@@ -11,10 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //ROUTES
-app.get('/', function (req, res) {
-    res.render('home');
-});
-
 app.get('main', (req, res) => {
     res.render('main', {});
 })
