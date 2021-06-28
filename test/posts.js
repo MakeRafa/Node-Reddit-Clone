@@ -37,6 +37,7 @@ describe('Posts', function () {
                 done(err);
             });
     });
+    
     it('should create with valid attributes at POST /posts/new', function (done) {
         // TODO: test code goes here!
         // Checks how many posts there are now
@@ -65,6 +66,7 @@ describe('Posts', function () {
                     .catch(function (err) {
                         done(err);
                     });
+                    done();
             })
             .catch(function (err) {
                 done(err);

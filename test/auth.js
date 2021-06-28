@@ -21,6 +21,7 @@ describe('User', function () {
             res.should.have.status(401);
             done();
         });
+        done();
     });
 
     // signup
@@ -36,6 +37,7 @@ describe('User', function () {
                     done();
                 });
         });
+        done();
     });
     after(function () {
         agent.close();
@@ -51,6 +53,7 @@ describe('User', function () {
                 agent.should.have.cookie('nToken');
                 done();
             });
+            done();
     });
     // logout
     it('should be able to logout', function (done) {
@@ -59,5 +62,6 @@ describe('User', function () {
             agent.should.not.have.cookie('nToken');
             done();
         });
+        done();
     });
 });

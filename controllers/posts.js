@@ -38,7 +38,7 @@ module.exports = (app) => {
     app.get('/', (req, res) => {
         const { user } = req;
         const currentUser = req.user;
-        console.log(req.cookies);
+        console.log(currentUser);
         Post.find({}).lean().populate('author')
             .then((posts) => res.render('posts-index', { posts, currentUser, user }))
             .catch((err) => {
@@ -69,6 +69,7 @@ module.exports = (app) => {
 
     app.put('/posts/:id/vote-up', (req, res) => {
         Post.findById(req.params.id).then((err, post) => {
+            console.log()
             post.upVotes.push(req.user._id);
             post.voteScore += 1;
             post.save();

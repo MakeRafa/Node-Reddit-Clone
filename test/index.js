@@ -23,5 +23,6 @@ describe('site', function () {
                 res.should.have.status(200);
                 return done(); // Call done if the test completed successfully.
             });
+            return done();
     });
 });

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 
 const checkAuth = (req, res, next) => {
     console.log('Checking authentication');
@@ -7,10 +8,15 @@ const checkAuth = (req, res, next) => {
     } else {
         const token = req.cookies.nToken;
         const decodedToken = jwt.decode(token, { complete: true }) || {};
-        req.user = decodedToken.payload;
+        User.findById(decodedToken.payload._id).then(user => {
+            req.user = user;
+            next();
+
+        })
+        
     }
 
-    next();
+    // next();
 };
 
 module.exports = checkAuth;
