@@ -47,7 +47,7 @@ module.exports = (app) => {
     app.get('/posts/:id', async (req, res) => {
         try {
             // double call "populate" in order to get both fields
-            const post = await Post.findById(req.params.id).lean().populate('comments').populate('author')
+            const post = await Post.findById(req.params.id).lean().populate({ path:'comments', populate: { path: 'author' } }).populate('author')
             const currentUser = await req.user;
 
             return res.render('posts-show', { post, currentUser })
