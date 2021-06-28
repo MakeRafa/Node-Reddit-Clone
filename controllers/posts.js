@@ -43,30 +43,25 @@ module.exports = (app) => {
             });
     });
 
-    // LOOK UP THE POST
-    app.get('/posts/:id', async (req, res) => {
-        try {
-            // double call "populate" in order to get both fields
-            const post = await Post.findById(req.params.id).lean().populate({ path:'comments', populate: { path: 'author' } }).populate('author')
-            const currentUser = await req.user;
-
-            return res.render('posts-show', { post, currentUser })
-        } catch (err) {
-            console.log(err.message);
-        };
+    // SHOW
+    app.get('/posts/:id', (req, res) => {
+        const currentUser = req.user;
+        Post.findById(req.params.id).populate('comments').lean()
+            .then((post) => res.render('posts-show', { post, currentUser }))
+            .catch((err) => {
+                console.log(err.message);
+            });
     });
+
 
     // SUBREDDIT
     app.get('/n/:subreddit', (req, res) => {
-        // console.log(req.params.subreddit);
-        const currentUser = req.user;
-        Post.find({ subreddit: req.params.subreddit }).lean().populate('author')
-        .then(posts => {
-            res.render('posts-index', { posts, currentUser });
-        }).catch(err => {
-            console.log(err.message);
-        })
-
+        const { user } = req;
+        Post.find({ subreddit: req.params.subreddit }).lean()
+            .then((posts) => res.render('posts-index', { posts, user }))
+            .catch((err) => {
+                console.log(err);
+            });
     });
 
 };
