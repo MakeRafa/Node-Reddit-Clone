@@ -52,12 +52,15 @@ module.exports = (app) => {
     });
 
     // LOOK UP THE POST
-    app.get('/posts/:id', (req, res) => {
-        Post.findById(req.params.id).lean().populate('comments')
-            .then((post) => res.render('posts-show', { post }))
-            .catch((err) => {
+    app.get('/posts/:id', async (req, res) => {
+        try {
+            const post = await Post.findById(req.params.id).lean().populate('comments')
+            const currentUser = await req.user;
+
+            return res.render('posts-show', { post, currentUser })
+        } catch (err) {
                 console.log(err.message);
-            });
+            };
     });
 
     // SUBREDDIT
