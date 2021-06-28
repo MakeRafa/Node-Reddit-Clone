@@ -1,26 +1,54 @@
 const Post = require('../models/post');
+const User = require('../models/user');
+const Comment = require('../models/comment');
 
 module.exports = (app) => {
-
+    // CREATE
     app.post('/posts/new', (req, res) => {
-        // console.log(req.body);
-        // INSTANTIATE INSTANCE OF POST MODEL
-        const post = new Post(req.body)
+        if (req.user) {
+            const userId = req.user._id;
+            const post = new Post(req.body);
+            post.author = userId;
 
-        // SAVE INSTANCE OF POST MODEL TO DB AND REDIRECT TO THE ROOT
-        post.save(() => res.redirect('/'))
+            post.save()
+                .then(() => User.findById(userId))
+                .then((user) => {
+                    user.posts.unshift(post);
+                    user.save();
+                    // REDIRECT TO THE NEW POST
+                    return res.redirect(`/posts/${post._id}`);
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
+        } else {
+            return res.status(401); // UNAUTHORIZED
+        }
     });
+
     app.get('/posts/new', (req, res) => {
         res.render('posts-new', {});
     })
 
-    app.get('/', async (req, res) => {
-        try {
-            const posts = await Post.find({}).lean();
-            return res.render('posts-index', { posts });
-        } catch (err) {
-            console.log(err.message);
-        }
+    // app.get('/', async (req, res) => {
+    //     try {
+    //         const posts = await Post.find({}).lean();
+    //         const currentUser = await req.user;
+
+    //         return res.render('posts-index', { posts, currentUser });
+    //     } catch (err) {
+    //         console.log(err.message);
+    //     }
+    // });
+    // INDEX
+    app.get('/', (req, res) => {
+        const { user } = req;
+        console.log(req.cookies);
+        Post.find({}).lean().populate('author')
+            .then((posts) => res.render('posts-index', { posts, user }))
+            .catch((err) => {
+                console.log(err.message);
+            });
     });
 
     // LOOK UP THE POST
@@ -33,14 +61,15 @@ module.exports = (app) => {
     });
 
     // SUBREDDIT
-    app.get('/n/:subreddit', async (req, res) => {
+    app.get('/n/:subreddit', (req, res) => {
         // console.log(req.params.subreddit);
-        try {
-            const posts = await Post.find({ subreddit: req.params.subreddit }).lean();
-            return res.render('posts-index', { posts });
-        } catch (err) {
+        const currentUser = req.user;
+        Post.find({ subreddit: req.params.subreddit }).lean().then(posts => {
+            res.render('posts-index', { posts, currentUser });
+        }).catch(err => {
             console.log(err.message);
-        }
+        })
+
     });
 
 };

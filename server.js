@@ -1,11 +1,23 @@
 //REQUIRE LIBRARIES
+require('dotenv').config()
+
 var express = require('express');
 var exphbs  = require('express-handlebars');
+
+const cookieParser = require('cookie-parser');
+
+const checkAuth = require('./middleware/checkAuth');
 //APP SETUP
 var app = express();
 
+
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
+
+// Add this after you initialize express.
+app.use(cookieParser());
+
+app.use(checkAuth);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
