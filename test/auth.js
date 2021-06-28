@@ -13,6 +13,7 @@ const agent = chai.request.agent(app);
 
 const User = require('../models/user');
 
+
 describe('User', function () {
     // TESTS WILL GO HERE.
     it('should not be able to login if they have not registered', function (done) {
@@ -35,5 +36,8 @@ describe('User', function () {
                     done();
                 });
         });
+    });
+    after(function () {
+        agent.close();
     });
 });
