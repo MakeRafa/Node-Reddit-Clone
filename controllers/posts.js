@@ -10,7 +10,8 @@ module.exports = (app) => {
             const post = new Post(req.body);
             post.author = userId;
 
-            post.save()
+            post
+                .save()
                 .then(() => User.findById(userId))
                 .then((user) => {
                     user.posts.unshift(post);
@@ -28,14 +29,15 @@ module.exports = (app) => {
 
     app.get('/posts/new', (req, res) => {
         const currentUser = req.user;
-        res.render('posts-new', {currentUser});
+        res.render('posts-new', { currentUser });
     })
 
     app.get('/', (req, res) => {
+        const { user } = req;
         const currentUser = req.user;
-
-        Post.find({})
-            .then((posts) => res.render('posts-index', { posts, currentUser }))
+        console.log(req.cookies);
+        Post.find({}).lean().populate('author')
+            .then((posts) => res.render('posts-index', { posts, currentUser, user }))
             .catch((err) => {
                 console.log(err.message);
             });
