@@ -17,12 +17,18 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <p>Reddit.js</p>
-                <li style="list-style-type: none;"><a href="/posts/new" class="btn btn-primary navbar-btn"">New Post</a></li>
+                <li style="list-style-type: none;"><a href="/posts/new" class="btn btn-primary navbar-btn">New Post</a></li>
             </a>
+            
+        
+        <ul class=" nav navbar-nav navbar-right">
+                <li><a href="/logout">Logout</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/sign-up">Sign Up</a></li>
+                </ul>
         </div>
     </nav>
-    {{!-- <h1>Reddit.js</h1> --}}
-    <div class="container">
+    <div class=" container">
         {{{ body }}}
     </div>
 
