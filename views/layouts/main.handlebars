@@ -17,15 +17,21 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <p>Reddit.js</p>
+
+                {{#if currentUser}}
                 <li style="list-style-type: none;"><a href="/posts/new" class="btn btn-primary navbar-btn">New Post</a></li>
+                {{/if}}
             </a>
-            
-        
-        <ul class=" nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+
+                {{#if currentUser}}
                 <li><a href="/logout">Logout</a></li>
+                {{else}}
                 <li><a href="/login">Login</a></li>
                 <li><a href="/sign-up">Sign Up</a></li>
-                </ul>
+                {{/if}}
+
+            </ul>
         </div>
     </nav>
     <div class=" container">

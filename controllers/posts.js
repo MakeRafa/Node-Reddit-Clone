@@ -1,15 +1,17 @@
 const Post = require('../models/post');
 
 module.exports = (app) => {
-
+    // CREATE
     app.post('/posts/new', (req, res) => {
-        // console.log(req.body);
-        // INSTANTIATE INSTANCE OF POST MODEL
-        const post = new Post(req.body)
+        if (req.user) {
+            const post = new Post(req.body);
 
-        // SAVE INSTANCE OF POST MODEL TO DB AND REDIRECT TO THE ROOT
-        post.save(() => res.redirect('/'))
+            post.save(() => res.redirect('/'));
+        } else {
+            return res.status(401); // UNAUTHORIZED
+        }
     });
+
     app.get('/posts/new', (req, res) => {
         res.render('posts-new', {});
     })
@@ -17,19 +19,24 @@ module.exports = (app) => {
     app.get('/', async (req, res) => {
         try {
             const posts = await Post.find({}).lean();
-            return res.render('posts-index', { posts });
+            const currentUser = await req.user;
+
+            return res.render('posts-index', { posts, currentUser });
         } catch (err) {
             console.log(err.message);
         }
     });
 
     // LOOK UP THE POST
-    app.get('/posts/:id', (req, res) => {
-        Post.findById(req.params.id).lean().populate('comments')
-            .then((post) => res.render('posts-show', { post }))
-            .catch((err) => {
+    app.get('/posts/:id', async (req, res) => {
+        try {
+            const post = await Post.findById(req.params.id).lean().populate('comments')
+            const currentUser = await req.user;
+
+            return res.render('posts-show', { post, currentUser })
+        } catch (err) {
                 console.log(err.message);
-            });
+            };
     });
 
     // SUBREDDIT
@@ -37,7 +44,9 @@ module.exports = (app) => {
         // console.log(req.params.subreddit);
         try {
             const posts = await Post.find({ subreddit: req.params.subreddit }).lean();
-            return res.render('posts-index', { posts });
+            const currentUser = await req.user;
+
+            return res.render('posts-index', { posts, currentUser });
         } catch (err) {
             console.log(err.message);
         }
