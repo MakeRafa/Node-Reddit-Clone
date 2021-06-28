@@ -22,7 +22,7 @@ app.use(checkAuth);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
+require('./controllers/replies.js')(app);
 require('./controllers/auth.js')(app);
 require('./controllers/comments.js')(app);
 require('./controllers/posts')(app);
