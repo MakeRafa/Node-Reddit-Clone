@@ -22,6 +22,8 @@ app.use(checkAuth);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use(express.static('public'));
+
 require('./controllers/replies.js')(app);
 require('./controllers/auth.js')(app);
 require('./controllers/comments.js')(app);
