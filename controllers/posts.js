@@ -29,23 +29,12 @@ module.exports = (app) => {
     app.get('/posts/new', (req, res) => {
         res.render('posts-new', {});
     })
-
-    // app.get('/', async (req, res) => {
-    //     try {
-    //         const posts = await Post.find({}).lean();
-    //         const currentUser = await req.user;
-
-    //         return res.render('posts-index', { posts, currentUser });
-    //     } catch (err) {
-    //         console.log(err.message);
-    //     }
-    // });
-    // INDEX
+    
     app.get('/', (req, res) => {
-        const { user } = req;
-        console.log(req.cookies);
-        Post.find({}).lean().populate('author')
-            .then((posts) => res.render('posts-index', { posts, user }))
+        const currentUser = req.user;
+
+        Post.find({})
+            .then((posts) => res.render('posts-index', { posts, currentUser }))
             .catch((err) => {
                 console.log(err.message);
             });
@@ -59,8 +48,8 @@ module.exports = (app) => {
 
             return res.render('posts-show', { post, currentUser })
         } catch (err) {
-                console.log(err.message);
-            };
+            console.log(err.message);
+        };
     });
 
     // SUBREDDIT
