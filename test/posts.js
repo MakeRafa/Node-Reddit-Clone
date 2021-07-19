@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const app = require('../server');
 // test/posts.js
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -7,15 +7,16 @@ const { describe, it, before } = require('mocha');
 // Import the Post model from our models folder so we
 // we can use it in our tests.
 const Post = require('../models/post');
-const app = require('../server');
+const User = require('../models/user');
 
-const should = chai.should();
-const agent = chai.request.agent(app);
+chai.should();
 
 chai.use(chaiHttp);
 
 describe('Posts', function () {
     // Post that we'll use for testing purposes
+    const agent = chai.request.agent(app);
+
     const newPost = {
         title: 'post title',
         url: 'https://www.google.com',
@@ -66,7 +67,6 @@ describe('Posts', function () {
                     .catch(function (err) {
                         done(err);
                     });
-                    done();
             })
             .catch(function (err) {
                 done(err);

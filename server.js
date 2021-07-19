@@ -1,8 +1,10 @@
 //REQUIRE LIBRARIES
 require('dotenv').config()
 
+
 var express = require('express');
 var exphbs  = require('express-handlebars');
+const port = 3000
 
 const cookieParser = require('cookie-parser');
 
@@ -33,6 +35,6 @@ require('./data/reddit-db');
 module.exports = app;
 
 // Start Server
-app.listen(3000, () => {
-    console.log('Reddit Clone listening on port localhost:3000!');
+app.listen(port, () => {
+    console.log(`Reddit Clone listening on port http://localhost:${port}`);
 });
